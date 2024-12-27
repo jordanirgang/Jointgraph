@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<robot>
+	<link name="link01"/>
+	
+	<link name="link02">
+
+	</link>
+
+	<joint name="joint_01">
+		<parent link="link01"/>
+		<child link="link02"/>
+		<origin xyz="0 -0.22 0.25"/>:w
+	</joint>
+
+	<link name="link03">
+
+	</link>
+	<joint name="joint_02">
+		<parent link="link01"/>
+		<child link="link03"/>
+		<origin xyz="0 1 1"/>
+	</joint>
+	<link name="link04"/>
+
+	<joint name="joint_03">
+		<parent link="link02"/>
+		<child link="link04"/>
+		<origin xyz="0 2 2"/>
+	</joint>
+</robot>
