@@ -7,18 +7,19 @@ struct Data{
 	float angle;
 };
 struct Node{
-	vector<Node *> adjacency_list;
+	vector<Node *> adjacencyList;
 	Data* data;
-
-
 };
+
 class JointGraph{
 	public:
 		JointGraph();
-		void addNode(Node link);
+		~JointGraph();
+		void addNode(Data linkData);
 		void addEdge(Node srcLink,Node destLink);
 
 	private:
+		int nodeCount;
 		vector<Node> nodes;
 };
 
