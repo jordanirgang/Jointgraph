@@ -7,6 +7,7 @@ int main (){
 	Data p = {4,0};
 	testGraph.addNode(d);
 	testGraph.addNode(p);
+	testGraph.addEdge(d,p);
 	cout << "test\n";
 	return 0;
 }
