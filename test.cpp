@@ -1,4 +1,5 @@
 #include "jointGraph.h"
+#include "BFS.h"
 #include <iostream>
 using namespace std;
 int main (){
@@ -8,6 +9,13 @@ int main (){
 	testGraph.addNode(d);
 	testGraph.addNode(p);
 	testGraph.addEdge(d,p);
+	std::cout << "GRAPH made";
+	queue toPrint = bfsJointGraph(testGraph,0);
+	while (!toPrint.empty())
+	{
+		std::cout << toPrint.front()->data->address << " ";
+		toPrint.pop();
+	}
 	cout << "test\n";
 	return 0;
 }

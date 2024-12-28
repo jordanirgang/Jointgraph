@@ -12,6 +12,7 @@ struct Node{
 	vector<Node *> adjacencyList;
 	Data* data;
 	int UUID;
+	bool isVisit;
 };
 
 class JointGraph{
@@ -22,7 +23,8 @@ class JointGraph{
 		void addEdge(Node srcLink,Node destLink);
 		void addEdge(Data srcDataLookup, Data destDataLookup);
 		void addEdge(int srcLink,int destLink);
-
+		Node* getNodeByIdxAdded(int idx);
+		vector<Node*> getAdjacentNodes(int nodeIdx);
 
 	private:
 		int nodeCount;

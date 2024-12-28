@@ -18,6 +18,7 @@ void JointGraph::addNode(Data linkData){
 		nodeToAdd.data = &linkData;
 		nodeToAdd.adjacencyList= vector<Node *>();
 		nodeToAdd.UUID= this->nodeCount;
+		nodeToAdd.isVisit = false;
 
 		this->nodes.push_back(nodeToAdd);
 		this->lookUp[this->nodes.back().data] = 0;
@@ -40,4 +41,16 @@ void JointGraph::addEdge(Data srcDataLookup, Data destDataLookup)
 void JointGraph::addEdge(int srcIdx, int destIdx)
 {
 	this->addEdge(nodes.at(srcIdx),this->nodes.at(destIdx));
+}
+
+Node *JointGraph::getNodeByIdxAdded(int idx)
+{
+	if(idx < this->nodeCount){
+    	return &this->nodes.at(idx);
+	}
+}
+
+vector<Node*> JointGraph::getAdjacentNodes(int nodeIdx)
+{
+	return(this->nodes.at(nodeIdx).adjacencyList);
 }
