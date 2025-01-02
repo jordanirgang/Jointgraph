@@ -13,14 +13,15 @@ int main (){
 	testGraph.addNode(d);
 	//issue first address being saved and not adding
 	testGraph.addNode(p);
-	testGraph.addEdge(d,p);
-	std::cout << "GRAPH made";
+	testGraph.addEdge(d,p); //fails
+	//testGraph.addEdge(0,1);
+	std::cout << "GRAPH made \n";
 	queue toPrint = bfsJointGraph(testGraph,0);
 	while (!toPrint.empty())
 	{
-		std::cout << toPrint.front()->data->address << " ";
+		cout << toPrint.front()->data->address << " --> ";
 		toPrint.pop();
 	}
-	cout << "test\n";
+	cout << "\ntest\n";
 	return 0;
 }

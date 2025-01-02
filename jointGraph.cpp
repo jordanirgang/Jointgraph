@@ -34,9 +34,9 @@ void JointGraph::addEdge(Node &srcLink, Node &destLink){
 void JointGraph::addEdge(Data &srcDataLookup, Data &destDataLookup)
 {
 	if(this->nodeCount >=0){
-		if(this->lookUp.find(&srcDataLookup) == this->lookUp.end() && this->lookUp.find(&destDataLookup) == this->lookUp.end() ){
+		//if(this->lookUp.find(&srcDataLookup) == this->lookUp.end() && this->lookUp.find(&destDataLookup) == this->lookUp.end() ){
 			this->addEdge(this->lookUp.at(&srcDataLookup),this->lookUp.at(&destDataLookup)); 
-		}
+		//}
 	}
 }
 
