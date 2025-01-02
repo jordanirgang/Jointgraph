@@ -1,6 +1,10 @@
+#ifndef BFS_H
+#define BFS_H
+
 #include "jointGraph.h"
 #include <iostream>
 #include <queue>
+#include <vector>
 
 using namespace std;
 //BFS print
@@ -27,3 +31,4 @@ queue<Node*>  bfsJointGraph(JointGraph &jg, int nodeStart){
     delete current;
     return returnQueue;
 }
+#endif

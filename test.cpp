@@ -4,9 +4,14 @@
 using namespace std;
 int main (){
 	JointGraph testGraph= JointGraph();
-	Data d = {5, 0};
-	Data p = {4,0};
+	Data d;
+	Data p;
+	d = {5, 0};
+	p = {4,0};
+
+
 	testGraph.addNode(d);
+	//issue first address being saved and not adding
 	testGraph.addNode(p);
 	testGraph.addEdge(d,p);
 	std::cout << "GRAPH made";
