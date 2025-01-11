@@ -1,5 +1,14 @@
 import sys
 import xml.etree.ElementTree as ET
+class Data:
+	jointAngle=0
+	def __init__(self,xml_data:tuple):
+		self.name=str(xml_data[0])+"->"+str(xml_data[1])
+	def setAngle(self, angle):
+		self.angle = angle
+	def getAngle(self):
+		return self.angle
+
 class Node:
     def __init__(self,data):
         self.data = data
@@ -33,6 +42,10 @@ class Graph:
                 sys.stdout.write(str(j.data)+"&")
             sys.stdout.write("\n")
 
+    def bfsGetJointAnglesQueue(self,start):
+        node_queue = []
+        return_queue = []
+
 def urdf2graph(path:str):
     graph=Graph()
     tree = ET.parse(path)
@@ -46,7 +59,6 @@ def urdf2graph(path:str):
         graph.addEdgeByName(data[0],data[1])
     return graph
     
-
 
 
 if __name__ == "__main__":
