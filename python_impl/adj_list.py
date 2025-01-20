@@ -1,5 +1,6 @@
 import sys
 import xml.etree.ElementTree as ET
+import queue
 class Data:
 	jointAngle=0
 	def __init__(self,xml_data:tuple):
@@ -13,6 +14,7 @@ class Node:
     def __init__(self,data):
         self.data = data
         self.children = []
+        self.is_visit = False
 
 class Graph:
     def __init__(self):
@@ -42,9 +44,29 @@ class Graph:
                 sys.stdout.write(str(j.data)+"&")
             sys.stdout.write("\n")
 
-    def bfsGetJointAnglesQueue(self,start):
-        node_queue = []
-        return_queue = []
+    def get_node_by_idx(self,idx):
+        return self.adj_list[idx]
+    
+    def set_node_by_idx_visit(self,idx,is_visit):
+         self.adj_list[idx].is_visit=is_visit
+
+    def bfs_get_joint_angles_queue(self,start):
+        node_queue = queue.Queue()
+        return_queue = queue.Queue()
+
+        self.set_node_by_idx_visit(start,True)
+        node_queue.put(self.add_node_by_idx(start))
+        while not node_queue.empty():
+            node_current = node_queue.get()       
+            return_queue.put(node_current)
+            for node in node_current.children:
+                if not node.is_visit:
+                    node.is_visit = True
+                    node_queue.put(node)
+        return return_queue
+
+
+
 
 def urdf2graph(path:str):
     graph=Graph()
@@ -81,5 +103,9 @@ if __name__ == "__main__":
     newGraph= urdf2graph('robot_test.xml')
     print(newGraph)
     newGraph.printAdjacencyList()
+    q = newGraph.bfs_get_joint_angles_queue(0)
+    while not q.empty():
+        node = q.get()
+        print(node.data.name)
 
 
