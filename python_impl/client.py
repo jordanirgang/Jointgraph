@@ -9,7 +9,7 @@ class Client:
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.client_port = client_port
         self.client_socket.bind(('',self.client_port))
-        self.listen = True
+        self.is_listening = True
         self.decoder = BSH.ByteStreamHandler()
 
     def no_timeout(self):
@@ -32,6 +32,15 @@ class Client:
         message, address = self.client_socket.recvfrom(1024)
         data_recieved = self.decoder.decompose_byte_frame(message) 
         return data_recieved
+    
+    def print_all_incoming_data(self):
+        print(self.get_listen_data())
+
+    def listen_loop(self,func):
+        while self.is_listening:
+            #overide this later
+            func()
+
 
 
 if __name__ == "__main__":
@@ -41,9 +50,10 @@ if __name__ == "__main__":
     puppet = Client(yl.dictionary['client']['port'])
     puppet.subscribe(server_ip= yl.dictionary['server']['ip'], server_port = yl.dictionary['server']['port'])
     puppet.no_timeout()
-    for i  in range(0,5):
-        print(puppet.get_listen_data())
-
+    puppet.listen_loop(puppet.print_all_incoming_data())
     
 
     
+
+    
+

@@ -1,6 +1,23 @@
+import queue
 import sys
 import xml.etree.ElementTree as ET
-import queue
+
+def make_urdf_graph(path:str):
+    graph=Graph()
+    tree = ET.parse(path)
+    root = tree.getroot()
+
+    for link in root.findall('./link'):
+        graph.addNode(Data(link.attrib['name']))
+
+    for joint in root.findall('./joint'):
+        data = (joint.find('parent').attrib['link'],
+                joint.find('child').attrib['link'],
+                joint.find('origin').attrib['xyz'])
+        
+        graph.addEdgeByName(data[0],data[1])
+    return graph
+
 class Data:
     #the angle insinuated here is at the end of the link
 	angle=0
@@ -73,13 +90,12 @@ class Graph:
 
     def print_node_angle(self,node_current:Node,idx=None,angle_idx_array=None):
         #usage should be attaching to update_with_bfs object
-        print(node_current.data.get_angle())
+        print((node_current.data.name,node_current.data.get_angle()))
 
     def get_node_angle(self,node_current:Node,idx:int,angle_idx_array:list):
         #usage should be attaching to update_with_bfs object
         #set int array from graph
         angle_idx_array[idx] = node_current.data.get_angle()
-
     
     def use_bfs(self,func,node_start:int,int_array:list):
         #TODO:in bfs streamer seperate int_array and node_start
@@ -89,7 +105,7 @@ class Graph:
         int_array_idx = 0
 
         self.set_node_by_idx_visit(node_start,True)
-        node_queue.put(self.get_node_by_idx(start))
+        node_queue.put(self.get_node_by_idx(node_start))
 
         while not node_queue.empty():
             #hopefully this acts as a pointer...yes, it is pass by refrence
@@ -113,23 +129,6 @@ class Graph:
 
 
 
-def urdf2graph(path:str):
-    graph=Graph()
-    tree = ET.parse(path)
-    root = tree.getroot()
-
-    for link in root.findall('./link'):
-        graph.addNode(Data(link.attrib['name']))
-
-    for joint in root.findall('./joint'):
-        data = (joint.find('parent').attrib['link'],
-                joint.find('child').attrib['link'],
-                joint.find('origin').attrib['xyz'])
-        
-        graph.addEdgeByName(data[0],data[1])
-    return graph
-    
-
 
 if __name__ == "__main__":
     graph= Graph()
@@ -138,18 +137,18 @@ if __name__ == "__main__":
     graph.addEdge(0,1)
     graph.addEdgeByName("A","B")
     graph.printAdjacencyList()
-    tree = ET.parse('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
-    root = tree.getroot()
-    print(root.findall('./link'))
-    for link in root.findall('./link'):
-        print(link.attrib['name'])
-    for joint in root.findall('./joint'):
-        data = (joint.find('parent').attrib['link'],
-                joint.find('child').attrib['link'],
-                joint.find('origin').attrib['xyz'])
+    #tree = ET.parse('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
+    #root = tree.getroot()
+    #print(root.findall('./link'))
+    #for link in root.findall('./link'):
+    #    print(link.attrib['name'])
+    #for joint in root.findall('./joint'):
+    #    data = (joint.find('parent').attrib['link'],
+    #            joint.find('child').attrib['link'],
+    #            joint.find('origin').attrib['xyz'])
 
-        print(data)
-    newGraph= urdf2graph('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
+    #    print(data)
+    newGraph= make_urdf_graph('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
     print(newGraph)
     newGraph.printAdjacencyList()
     q = newGraph.bfs_get_joint_angles_queue(0)
