@@ -41,7 +41,9 @@ if __name__ == "__main__":
     puppet = Client(yl.dictionary['client']['port'])
     puppet.subscribe(server_ip= yl.dictionary['server']['ip'], server_port = yl.dictionary['server']['port'])
     puppet.no_timeout()
-    print(puppet.get_listen_data())
+    for i  in range(0,5):
+        print(puppet.get_listen_data())
+
     
 
     
