@@ -1,6 +1,23 @@
+import queue
 import sys
 import xml.etree.ElementTree as ET
-import queue
+
+def make_urdf_graph(path:str):
+    graph=Graph()
+    tree = ET.parse(path)
+    root = tree.getroot()
+
+    for link in root.findall('./link'):
+        graph.addNode(Data(link.attrib['name']))
+
+    for joint in root.findall('./joint'):
+        data = (joint.find('parent').attrib['link'],
+                joint.find('child').attrib['link'],
+                joint.find('origin').attrib['xyz'])
+        
+        graph.addEdgeByName(data[0],data[1])
+    return graph
+
 class Data:
     #the angle insinuated here is at the end of the link
 	angle=0
@@ -113,23 +130,6 @@ class Graph:
 
 
 
-def urdf2graph(path:str):
-    graph=Graph()
-    tree = ET.parse(path)
-    root = tree.getroot()
-
-    for link in root.findall('./link'):
-        graph.addNode(Data(link.attrib['name']))
-
-    for joint in root.findall('./joint'):
-        data = (joint.find('parent').attrib['link'],
-                joint.find('child').attrib['link'],
-                joint.find('origin').attrib['xyz'])
-        
-        graph.addEdgeByName(data[0],data[1])
-    return graph
-    
-
 
 if __name__ == "__main__":
     graph= Graph()
@@ -138,18 +138,18 @@ if __name__ == "__main__":
     graph.addEdge(0,1)
     graph.addEdgeByName("A","B")
     graph.printAdjacencyList()
-    tree = ET.parse('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
-    root = tree.getroot()
-    print(root.findall('./link'))
-    for link in root.findall('./link'):
-        print(link.attrib['name'])
-    for joint in root.findall('./joint'):
-        data = (joint.find('parent').attrib['link'],
-                joint.find('child').attrib['link'],
-                joint.find('origin').attrib['xyz'])
+    #tree = ET.parse('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
+    #root = tree.getroot()
+    #print(root.findall('./link'))
+    #for link in root.findall('./link'):
+    #    print(link.attrib['name'])
+    #for joint in root.findall('./joint'):
+    #    data = (joint.find('parent').attrib['link'],
+    #            joint.find('child').attrib['link'],
+    #            joint.find('origin').attrib['xyz'])
 
-        print(data)
-    newGraph= urdf2graph('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
+    #    print(data)
+    newGraph= make_urdf_graph('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
     print(newGraph)
     newGraph.printAdjacencyList()
     q = newGraph.bfs_get_joint_angles_queue(0)
