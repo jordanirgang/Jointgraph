@@ -34,7 +34,7 @@ class Client:
         return data_recieved
     
     def print_all_incoming_data(self):
-        print(self.get_byte_stream_data())
+        print(self.get_listen_data())
 
     def listen_loop(self,func):
         while self.is_listening:

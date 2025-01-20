@@ -59,7 +59,7 @@ class ByteStreamHandler:
                     self.prev_frame = decomposed_frame 
                     return int_array_out
         self.droped_frames +=1
-        print((self.frame,int_array_out,"dropped"))
+        print((self.prev_frame,self.frame,int_array_out,"dropped"))
         return []
 
 

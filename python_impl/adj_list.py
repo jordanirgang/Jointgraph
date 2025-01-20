@@ -90,13 +90,12 @@ class Graph:
 
     def print_node_angle(self,node_current:Node,idx=None,angle_idx_array=None):
         #usage should be attaching to update_with_bfs object
-        print(node_current.data.get_angle())
+        print((node_current.data.name,node_current.data.get_angle()))
 
     def get_node_angle(self,node_current:Node,idx:int,angle_idx_array:list):
         #usage should be attaching to update_with_bfs object
         #set int array from graph
         angle_idx_array[idx] = node_current.data.get_angle()
-
     
     def use_bfs(self,func,node_start:int,int_array:list):
         #TODO:in bfs streamer seperate int_array and node_start
@@ -106,7 +105,7 @@ class Graph:
         int_array_idx = 0
 
         self.set_node_by_idx_visit(node_start,True)
-        node_queue.put(self.get_node_by_idx(start))
+        node_queue.put(self.get_node_by_idx(node_start))
 
         while not node_queue.empty():
             #hopefully this acts as a pointer...yes, it is pass by refrence
