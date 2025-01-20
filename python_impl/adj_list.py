@@ -55,7 +55,7 @@ class Graph:
         return_queue = queue.Queue()
 
         self.set_node_by_idx_visit(start,True)
-        node_queue.put(self.add_node_by_idx(start))
+        node_queue.put(self.get_node_by_idx(start))
         while not node_queue.empty():
             node_current = node_queue.get()       
             return_queue.put(node_current)
@@ -104,8 +104,9 @@ if __name__ == "__main__":
     print(newGraph)
     newGraph.printAdjacencyList()
     q = newGraph.bfs_get_joint_angles_queue(0)
+    print(q)
     while not q.empty():
         node = q.get()
-        print(node.data.name)
+        print(node.data)
 
 
