@@ -5,7 +5,7 @@ from adj_list import Graph,make_urdf_graph
 import yamlLoader as yl
 
 #acting as an adopter class between udp client and graph/urdf reader
-class Puppet(client.Client):
+class AClientGraphAdopter(client.Client):
     def __init__(self,server_ip="127.0.0.1",server_port=8080,client_port= 8888,config_file="robot_urdf.xml"):
         super().__init__(server_ip,server_port,client_port)
         self.graph = make_urdf_graph(config_file)
