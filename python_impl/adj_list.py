@@ -1,6 +1,8 @@
 import queue
 import sys
 import xml.etree.ElementTree as ET
+from A_data_source import ADataSrc
+
 
 def make_urdf_graph(path:str):
     graph=Graph()
@@ -8,7 +10,7 @@ def make_urdf_graph(path:str):
     root = tree.getroot()
 
     for link in root.findall('./link'):
-        graph.addNode(Data(link.attrib['name']))
+        graph.addNode(ADataSrc(link.attrib['name']))
 
     for joint in root.findall('./joint'):
         data = (joint.find('parent').attrib['link'],
@@ -18,21 +20,20 @@ def make_urdf_graph(path:str):
         graph.addEdgeByName(data[0],data[1])
     return graph
 
-class Data:
-    #the angle insinuated here is at the end of the link
-	angle=0
-	def __init__(self,xml_data:str):
-		self.name=str(xml_data)
-	def set_angle(self, angle):
-		self.angle = angle
-	def get_angle(self):
-		return self.angle
-
 class Node:
-    def __init__(self,data:Data):
+    def __init__(self,data:ADataSrc):
         self.data = data
         self.children = []
         self.is_visit = False
+        
+    def get_name(self):
+        return self.data.get_name()
+    
+    def get_angle(self):
+        return self.data.get_angle()
+    
+    def set_angle(self,angle):
+        return self.data.get_angle(angle)
 
 class Graph:
     def __init__(self):
@@ -40,7 +41,7 @@ class Graph:
         self.look_up = {}
         self.node_count = 0
 
-    def addNode(self,data:Data):
+    def addNode(self,data:ADataSrc):
         if data not in self.look_up:
             self.adj_list.append(Node(data))
             self.look_up[data.name]= self.node_count
@@ -90,12 +91,12 @@ class Graph:
 
     def print_node_angle(self,node_current:Node,idx=None,angle_idx_array=None):
         #usage should be attaching to update_with_bfs object
-        print((node_current.data.name,node_current.data.get_angle()))
+        print((node_current.get_name(),node_current.get_angle()))
 
     def get_node_angle(self,node_current:Node,idx:int,angle_idx_array:list):
         #usage should be attaching to update_with_bfs object
         #set int array from graph
-        angle_idx_array[idx] = node_current.data.get_angle()
+        angle_idx_array[idx] = node_current.get_angle()
     
     def use_bfs(self,func,node_start:int,int_array:list):
         #TODO:in bfs streamer seperate int_array and node_start
@@ -132,8 +133,8 @@ class Graph:
 
 if __name__ == "__main__":
     graph= Graph()
-    graph.addNode(Data("A"))
-    graph.addNode(Data("B"))
+    graph.addNode(ADataSrc("A"))
+    graph.addNode(ADataSrc("B"))
     graph.addEdge(0,1)
     graph.addEdgeByName("A","B")
     graph.printAdjacencyList()
@@ -156,7 +157,7 @@ if __name__ == "__main__":
     while not q.empty():
         node = q.get()
         node.is_visit = False
-        print((node.data.name,node.is_visit,node.data.get_angle()))
+        print((node.get_name(),node.is_visit,node.get_angle()))
 
     sample_data = [10 ,40, 50 ,20] 
     start = 0
