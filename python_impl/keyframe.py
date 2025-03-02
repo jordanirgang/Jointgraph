@@ -30,13 +30,15 @@ class CSVKeyframe:
         return float(self.data[frame][address])
 
     def write(self,joint_angle, address = 0):    
-        print(len(self.data))
+        #print(len(self.data))
         #if current_frame is bigger than data list size
         if self.current_write_frame > len(self.data)-1:
             self.data.append(self.make_new_keyframe())
 
         self.data[self.current_write_frame][address] =  joint_angle
         self.current_write_frame +=1
+        if self.real_time_update:
+            self.write_end()
 
     def write_end(self):
         # Write lines to CSV file
@@ -44,9 +46,10 @@ class CSVKeyframe:
             writer = csv.writer(csvfile)
             for line in self.data:
                 writer.writerow(line)
+        #print("write complete")
 
     def make_new_keyframe(self):
-        print("new keyframe added")
+        #print("new keyframe added")
         keyframe = [0]*len(self.data[0]) 
         keyframe[0] = self.current_write_frame
         keyframe[1] = self.default_start_node_idx
@@ -56,11 +59,12 @@ class CSVKeyframe:
 if __name__ == "__main__":
     keyframe = CSVKeyframe("/media/ducktop/shared/code/cpp/Jointgraph/resources/keyframe.csv")
     keyframe_writer = CSVKeyframe("/media/ducktop/shared/code/cpp/Jointgraph/resources/keyframe.csv")
+    keyframe_writer.real_time_update = True
 
     print(keyframe.data[0][1])
 
     print(keyframe_writer.data)
-    for i in range(0, 50):
+    for i in range(0, 40):
         keyframe_writer.write(455+i,address=3)
     print(keyframe_writer.data)
     keyframe_writer.write_end()
