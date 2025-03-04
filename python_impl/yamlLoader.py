@@ -7,8 +7,10 @@ except ImportError:
     from yaml import Load
 
 cwd = os.getcwd()
-yaml_file = os.path.join(str(cwd),"network_config.yaml")
+yaml_file = os.path.join(str(cwd),"resources/network_config.yaml")
 
 stream = open(yaml_file, 'r')
 dictionary = yaml.load(stream,Loader=yaml.Loader)
 #print(dictionary['server']['port'])
+
+URDF_LOCATION = dictionary['urdf']['location']
