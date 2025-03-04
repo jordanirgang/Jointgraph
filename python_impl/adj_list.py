@@ -1,24 +1,7 @@
 import queue
 import sys
-import xml.etree.ElementTree as ET
 from A_data_source import ADataSrc
 
-
-def make_urdf_graph(path:str):
-    graph=Graph()
-    tree = ET.parse(path)
-    root = tree.getroot()
-
-    for link in root.findall('./link'):
-        graph.addNode(ADataSrc(link.attrib['name']))
-
-    for joint in root.findall('./joint'):
-        data = (joint.find('parent').attrib['link'],
-                joint.find('child').attrib['link'],
-                joint.find('origin').attrib['xyz'])
-        
-        graph.addEdgeByName(data[0],data[1])
-    return graph
 
 class Node:
     def __init__(self,data:ADataSrc):
@@ -33,7 +16,7 @@ class Node:
         return self.data.get_angle()
     
     def set_angle(self,angle):
-        return self.data.get_angle(angle)
+        return self.data.set_angle(angle)
 
 class Graph:
     def __init__(self):
@@ -87,7 +70,7 @@ class Graph:
     def set_node_angle(self,node_current:Node,idx:int,angle_idx_array:list):
         #usage should be attaching to update_with_bfs object
         #set graph from int array stream
-        node_current.data.set_angle(angle_idx_array[idx])
+        node_current.set_angle(angle_idx_array[idx])
 
     def print_node_angle(self,node_current:Node,idx=None,angle_idx_array=None):
         #usage should be attaching to update_with_bfs object
@@ -129,15 +112,21 @@ class Graph:
         
 
 
+#imports only needed for concrete testing
+from A_joint_impl import NullAngleImpl
+from A_data_source import DataSrc
+import yamlLoader as yl
 
 
 if __name__ == "__main__":
     graph= Graph()
-    graph.addNode(ADataSrc("A"))
-    graph.addNode(ADataSrc("B"))
+    #also testing concrete implementation
+    graph.addNode(DataSrc("A",NullAngleImpl()))
+    graph.addNode(DataSrc("B"))
     graph.addEdge(0,1)
     graph.addEdgeByName("A","B")
     graph.printAdjacencyList()
+    
     #tree = ET.parse('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
     #root = tree.getroot()
     #print(root.findall('./link'))
@@ -149,7 +138,9 @@ if __name__ == "__main__":
     #            joint.find('origin').attrib['xyz'])
 
     #    print(data)
-    newGraph= make_urdf_graph('/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml')
+
+
+    newGraph= make_urdf_graph(yl.URDF_LOCATION)
     print(newGraph)
     newGraph.printAdjacencyList()
     q = newGraph.bfs_get_joint_angles_queue(0)
