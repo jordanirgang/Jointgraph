@@ -15,8 +15,12 @@ class KeyframeAngleImpl(AJointImpl):
     def populate(self,joint_angle):
         self.keyframe_db.write(joint_angle,self.address)
 
+#TODO:kind of a factory pattern but lazier, should probably move to a creator
+def create_csv_keyframe(path):
+    return CSVKeyframe(path)
+
 if __name__ == "__main__":
-    keyframe = CSVKeyframe("/media/ducktop/shared/code/cpp/Jointgraph/resources/keyframe.csv")
+    keyframe = create_csv_keyframe("/media/ducktop/shared/code/cpp/Jointgraph/resources/keyframe.csv")
     
     test_idx_2 = KeyframeAngleImpl(2,0,keyframe)
     test_idx_3 = KeyframeAngleImpl(3,0,keyframe)
