@@ -1,0 +1,11 @@
+server:
+  ip: 127.0.0.1
+  port: 8080
+
+client:
+  port: 8888
+
+urdf:
+  #location: "/home/ducktop/code/cpp/Jointgraph/python_impl/robot_test.xml"
+  location: "/home/duckpcc/dev/code/Jointgraph/resources/robot_test.xml"
+

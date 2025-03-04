@@ -1,19 +1,17 @@
-from A_joint_impl import AJointImpl
+from A_joint_impl import AJointImpl,NullAngleImpl
 
-class NullAngleImpl(AJointImpl):
-    
-    def __init__(self,hardcoded=0):
-        self.hardcoded = hardcoded
-
-    #@overrides(AGatherImpl)
-    def gather(self):
-        return self.hardcoded
-
-    #@overrides(AGatherImpl)
-    def populate(self,joint_angle):
-        print(("null setter used, ",joint_angle))
-
+#define interface
 class ADataSrc:
+   def get_name(self):
+       pass
+   def set_angle(self):
+       pass
+   def get_angle(self):
+       pass
+   
+
+#Generic data source 
+class DataSrc(ADataSrc):
     #the angle insinuated here is at the end of the link
     angle=0
 

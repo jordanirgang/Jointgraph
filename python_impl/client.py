@@ -5,7 +5,7 @@ import byteStreamHandler as BSH
 
 class Client:
 
-    def __init__(self,server_ip="127.0.0.1",server_port=8080,client_port= 8888):
+    def __init__(self,client_port= 8888):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.client_port = client_port
         self.client_socket.bind(('',self.client_port))
@@ -44,8 +44,6 @@ class Client:
 
 
 if __name__ == "__main__":
-    
-   
     #(yl.dictionary['server']['ip'],yl.dictionary['server']['port'])
     puppet = Client(yl.dictionary['client']['port'])
     puppet.subscribe(server_ip= yl.dictionary['server']['ip'], server_port = yl.dictionary['server']['port'])
