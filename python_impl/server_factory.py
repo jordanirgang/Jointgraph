@@ -1,15 +1,17 @@
-from A_client_graph_adopter import AClientGraphAdopter
+from A_server_graph_adopter import AServerGraphAdopter
 from joint_keyframe_impl import KeyframeAngleImpl,create_csv_keyframe
 from A_joint_impl import NullAngleImpl
 from A_data_source import DataSrc
 from adj_list import Graph
 import xml.etree.ElementTree as ET
+import time
 
 
-class ClientFactory:
+class ServerFactory:
     def create_csv_keyframe_instance(xml_path:str,
                 CSV_path:str,
-                client_port= 8888):
+                server_ip= '',
+                server_port= 8080):
         #TODO: implement strategy pattern for this algorithm but for swithching impl
         graph=Graph()
         tree = ET.parse(xml_path)
@@ -30,11 +32,11 @@ class ClientFactory:
                     joint.find('origin').attrib['xyz'])
             
             graph.addEdgeByName(data[0],data[1])
+        print(CSV_path)
 
-        client_to_build = AClientGraphAdopter(client_port,graph)
-        return client_to_build
+        return AServerGraphAdopter(server_ip,server_port,graph)
     
-    def create_print_out_instance(xml_path:str, client_port= 8888):
+    def create_print_out_instance(xml_path:str, server_ip="",server_port= 8080):
         graph=Graph()
         tree = ET.parse(xml_path)
         root = tree.getroot()
@@ -51,8 +53,7 @@ class ClientFactory:
             
             graph.addEdgeByName(data[0],data[1])
 
-        client_to_build = AClientGraphAdopter(client_port,graph)
-        return client_to_build
+        return AServerGraphAdopter(server_ip,server_port,graph)
         
 
 
@@ -60,10 +61,18 @@ import yamlLoader as yl
 import os
 if __name__ == "__main__":
     cwd = os.getcwd()
-    csv_file = os.path.join(str(cwd),"resources/network_config.yaml")    
-    #puppet = Client_Factory.create_csv_keyframe_instance(xml_path=yl.URDF_LOCATION,CSV_path=csv_file,client_port=yl.dictionary['client']['port'])
-    puppet = ClientFactory.create_print_out_instance(xml_path=yl.URDF_LOCATION,client_port=yl.dictionary['client']['port'])
+    csv_file = os.path.join(str(cwd),"resources/keyframe.csv")    
+    #controller = ServerFactory.create_csv_keyframe_instance(xml_path=yl.URDF_LOCATION,CSV_path=csv_file,client_port=yl.dictionary['client']['port'])
+    controller = ServerFactory.create_csv_keyframe_instance(xml_path=yl.URDF_LOCATION,
+                                                             CSV_path=csv_file,
+                                                             server_ip=yl.dictionary['server']['ip'],
+                                                             server_port=yl.dictionary['server']['port'])
+    #controller` = ServerFactory.create_print_out_instance(xml_path=yl.URDF_LOCATION,server_ip=yl.dictionary['server']['ip'],server_port=yl.dictionary['server']['port'])
 
-    puppet.subscribe(server_ip= yl.dictionary['server']['ip'], server_port = yl.dictionary['server']['port'])
-    puppet.no_timeout()
-    puppet.listen_loop(puppet.listen_for_joints)
+    controller.get_subscribers()
+    time.sleep(5)
+    #for now testing 0 index
+    #TODO:figure out when to switch index start count
+    for i in range(0,3):
+        controller.publish_joints(1)
+

@@ -24,7 +24,9 @@ class Server:
         self.server_socket.sendto(self.server_ok.to_bytes(1,'little'),self.subscriber_addresses[-1])
 
     def publish_int_array(self,data_to_send):
-        msg_to_send = self.encoder.compose_byte_frame(data_to_send)
+        #convert all data to int
+        data_to_send_int = [ int(x) for x in data_to_send ]
+        msg_to_send = self.encoder.compose_byte_frame(data_to_send_int)
         print((msg_to_send,"sent"))
         for client_tuple in self.subscriber_addresses:
             self.server_socket.sendto(msg_to_send,client_tuple)

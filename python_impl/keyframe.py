@@ -27,6 +27,7 @@ class CSVKeyframe:
         
 
     def read(self,frame=0,address= 0)->float:
+        #print((self.data,frame,address,self.data[frame][address]))
         return float(self.data[frame][address])
 
     def write(self,joint_angle, address = 0):    

@@ -21,7 +21,7 @@ class AClientGraphAdopter(client.Client):
         int_array = self.get_listen_data()
         if len(int_array) > 0:
             node_start_idx = int_array[0]
-            joint_data = int_array[1:-1]
+            joint_data = int_array[0:-1]
             self.graph.use_bfs(self.graph.set_node_angle,node_start_idx,joint_data)
             #TODO:remove after verifiying
             self.check_joint_states()

@@ -18,6 +18,7 @@ class NullAngleImpl(AJointImpl):
 
     #@overrides(AGatherImpl)
     def gather(self):
+        print("null getter used, ",self.hardcoded)
         return self.hardcoded
 
     #@overrides(AGatherImpl)

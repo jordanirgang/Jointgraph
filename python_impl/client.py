@@ -31,6 +31,7 @@ class Client:
     def get_listen_data(self):
         message, address = self.client_socket.recvfrom(1024)
         data_recieved = self.decoder.decompose_byte_frame(message) 
+        #print((data_recieved,"recv"))
         return data_recieved
     
     def print_all_incoming_data(self):

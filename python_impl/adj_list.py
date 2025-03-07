@@ -70,6 +70,7 @@ class Graph:
     def set_node_angle(self,node_current:Node,idx:int,angle_idx_array:list):
         #usage should be attaching to update_with_bfs object
         #set graph from int array stream
+        print((idx,angle_idx_array))
         node_current.set_angle(angle_idx_array[idx])
 
     def print_node_angle(self,node_current:Node,idx=None,angle_idx_array=None):
@@ -79,7 +80,9 @@ class Graph:
     def get_node_angle(self,node_current:Node,idx:int,angle_idx_array:list):
         #usage should be attaching to update_with_bfs object
         #set int array from graph
-        angle_idx_array[idx] = node_current.get_angle()
+        #pass by ref and modify idx array coming in
+        #TODO:potentialy add capability to read an array of length = to the full graph length
+        angle_idx_array.append(node_current.get_angle())
     
     def use_bfs(self,func,node_start:int,int_array:list):
         #TODO:in bfs streamer seperate int_array and node_start
@@ -140,25 +143,25 @@ if __name__ == "__main__":
     #    print(data)
 
 
-    newGraph= make_urdf_graph(yl.URDF_LOCATION)
-    print(newGraph)
-    newGraph.printAdjacencyList()
-    q = newGraph.bfs_get_joint_angles_queue(0)
-    print(q)
-    while not q.empty():
-        node = q.get()
-        node.is_visit = False
-        print((node.get_name(),node.is_visit,node.get_angle()))
+    #newGraph= make_urdf_graph(yl.URDF_LOCATION)
+    #print(newGraph)
+    #newGraph.printAdjacencyList()
+    #q = newGraph.bfs_get_joint_angles_queue(0)
+    #print(q)
+    #while not q.empty():
+    #    node = q.get()
+    #    node.is_visit = False
+    #    print((node.get_name(),node.is_visit,node.get_angle()))
 
-    sample_data = [10 ,40, 50 ,20] 
-    start = 0
-    newGraph.use_bfs(newGraph.print_node_angle,start,sample_data)
-    newGraph.use_bfs(newGraph.set_node_angle,start,sample_data)
-    newGraph.use_bfs(newGraph.print_node_angle,start,sample_data)
+    #sample_data = [10 ,40, 50 ,20] 
+    #start = 0
+    #newGraph.use_bfs(newGraph.print_node_angle,start,sample_data)
+    #newGraph.use_bfs(newGraph.set_node_angle,start,sample_data)
+    #newGraph.use_bfs(newGraph.print_node_angle,start,sample_data)
     
-    get_ray = [0,0,0,0]
-    newGraph.use_bfs(newGraph.get_node_angle,start,get_ray)
-    print(get_ray)
+   # get_ray = [0,0,0,0]
+   # newGraph.use_bfs(newGraph.get_node_angle,start,get_ray)
+   # print(get_ray)
 
 
 
