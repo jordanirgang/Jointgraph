@@ -1,5 +1,6 @@
 from A_client_graph_adopter import AClientGraphAdopter
 from joint_keyframe_impl import KeyframeAngleImpl,create_csv_keyframe
+from joint_blender_impl import JointBlenderImpl
 from A_joint_impl import NullAngleImpl
 from A_data_source import DataSrc
 from adj_list import Graph
@@ -54,7 +55,27 @@ class ClientFactory:
         client_to_build = AClientGraphAdopter(client_port,graph)
         return client_to_build
         
+  
+    def create_blender_instance(xml_path:str, client_port= 8888,armature_rig="Armature"):
+        graph=Graph()
+        tree = ET.parse(xml_path)
+        root = tree.getroot()
 
+        list_address = 0
+        for link in root.findall('./link'):
+            #uses urdf bone name to label where blender sources data 
+            graph.addNode(DataSrc(link.attrib['name'],
+                                  JointBlenderImpl(link.attrib['name'],armature_rig)))
+
+        for joint in root.findall('./joint'):
+            data = (joint.find('parent').attrib['link'],
+                    joint.find('child').attrib['link'],
+                    joint.find('origin').attrib['xyz'])
+            
+            graph.addEdgeByName(data[0],data[1])
+
+        client_to_build = AClientGraphAdopter(client_port,graph)
+        return client_to_build
 
 import yamlLoader as yl
 import os
